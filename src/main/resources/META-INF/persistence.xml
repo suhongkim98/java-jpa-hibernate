@@ -9,7 +9,11 @@
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
 
-            <!-- option -->
+
+            <!-- collection fetch join 에서 페이징 시도 시 에러발생모드(default = false) -->
+            <property name="hibernate.query.fail_on_pagination_over_collection_fetch" value="true"/>
+
+            <!-- 선택 -->
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.use_sql_comments" value="true"/>
