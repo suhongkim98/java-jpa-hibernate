@@ -174,7 +174,7 @@ public class FetchJoinTests {
         // 컬렉션 페치 조인 예제에 페이징 걸어서 워링 확인해보자
         // HHH000104: firstResult/maxResults specified with collection fetch; applying in memory! 라는 워링 창이 뜰 것이다.
 
-        // 컬렉션 조인 시 쿼리최적화를 위해 fetch join 을 하지말고 fetch join 대신 @BatchSize 설정으로 N + 1 문제를 해결하는 방법으로 페이징한다.
+        // 컬렉션 조인후 "페이징"하고자 할 때는 쿼리최적화를 위해 fetch join 을 하지말고 대신 @BatchSize 설정으로 N + 1 문제를 해결하는 방법으로 페이징한다.
         // @BatchSize 설정은 N + 1 문제를 해결하는 또다른 방법으로 IN절을 이용해 batchSize 만큼 묶어 보내어 쿼리를 보낸다.
         // @BatchSize 설정은 한방쿼리는 안되지만 쿼리 날리는 횟수가 크게 줄어든다.
 
