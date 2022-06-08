@@ -16,6 +16,7 @@
 └── test
     └── java
         ├── CascadeTests.java
+        ├── DirtyCheckingTests.java
         ├── FetchJoinTests.java
         ├── HibernateTests.java
         └── JoinTests.java
