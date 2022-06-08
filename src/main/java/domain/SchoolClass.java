@@ -36,6 +36,9 @@ public class SchoolClass {
         person.setMyClass(this); // 연관관계의 주인에 class 설정
         this.personList.add(person); // OOP 관점에서 봤을 때 얘도 설정해주어야 함
     }
+    public void removePerson(Person person) {
+        this.personList.remove(person);
+    }
     public void changeName(String name) {
         this.name = name;
     }
