@@ -207,4 +207,9 @@ public class HibernateTests {
             System.out.println();
         }
     }
+
+    @Test
+    public void fromSubQueryExample() {
+        // TODO : hibernate 6부터는 FROM 절의 서브쿼리를 지원한다.
+    }
 }
