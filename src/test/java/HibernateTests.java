@@ -7,8 +7,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import javax.persistence.*;
-import javax.transaction.Transactional;
+import jakarta.persistence.*;
 import java.util.List;
 
 /*

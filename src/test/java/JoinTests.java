@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 /*
@@ -84,7 +84,9 @@ public class JoinTests {
     }
     @Test
     public void oneToManyInnerJoinExample() {
-        // 일대다 조회, 반은 실제로 2개인데 가짜데이터 생성되어 사람 개수만큼 60개반 생성 확인, 해결 위해서는 컬렉션 조인 해야한다.
+        // hibernate 6로 업그레이드하며 5버전과 다른 중대한 변경점이 있었다.
+        // hibernate 5까지는 OneToMany에 해당하는 엔티티와 조인을 걸면 가짜 데이터가 생성되어 별도로 distinct 키워드를 통해 중복제거 하는 과정이 필요했다.
+        // hibernate 6부터는 별도로 distinct를 붙이지 않아도 가짜 데이터가 생성되지 않는다.
         EntityManager em = emf.createEntityManager();
         String query = "select c from SchoolClass c " +
                 "inner join c.personList p " +
@@ -93,7 +95,7 @@ public class JoinTests {
                 .setParameter("name", "%반%")
                 .getResultList(); // 사람 이름에 반 이 들어가면 조회 (모든 사람 이름에 반이 들어가므로 전체 조회)
 
-        Assert.assertNotEquals(classList.size(), 2); // 2개가 아님
+        Assert.assertEquals(classList.size(), 2); // 중복이 제거된 2개만 조회
         System.out.println("classListSize: " + classList.size());
 
         for(SchoolClass schoolClass : classList) {
@@ -103,6 +105,7 @@ public class JoinTests {
     @Test
     public void oneToManyCollectionInnerJoinExample() {
         // 컬렉션 조인은 distinct 만 붙여주면 된다.
+        // 하지만 hibernate 6부터는 distinct를 붙여 컬렉션 조인하지 않아도 중복이 제거된다.
         EntityManager em = emf.createEntityManager();
         String query = "select distinct c from SchoolClass c " +
                 "inner join c.personList p " +
