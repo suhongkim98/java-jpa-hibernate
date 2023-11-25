@@ -39,7 +39,8 @@ public class Person {
         this.name = name;
     }
     @Builder
-    public Person(String name, String email, String idNumber, SchoolRank rank) {
+    public Person(Long id, String name, String email, String idNumber, SchoolRank rank) {
+        this.id = id;
         this.idNumber = idNumber;
         this.rank = rank;
         this.name = name;

@@ -1,6 +1,7 @@
 import domain.Person;
 import domain.SchoolClass;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -12,7 +13,6 @@ import jakarta.persistence.Persistence;
 /*
 * 더티체킹 예제
 * 일반적인 더티체킹(update)
-* 리스트 add, remove(insert, delete)
  */
 public class DirtyCheckingTests {
 
@@ -26,9 +26,12 @@ public class DirtyCheckingTests {
         emf.close();
     }
 
+    /**
+     * 일반적인 더티체킹
+     * 일반 더티체킹으로 연관관계 컬렉션 추가, 삭제까지 변화를 감지하지 못함, 이는 cascade, orphan removal과 관계있음
+     */
     @Test
     public void commonDirtyChecking() {
-        // 일반적인 더티체킹
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
@@ -55,67 +58,31 @@ public class DirtyCheckingTests {
             em.close();
         }
     }
+
     @Test
-    public void collectionAddDirtyChecking() {
-        // 리스트 add 더티체킹
+    public void ID가_동일하면_더티체킹_발생() {
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
-            SchoolClass schoolClass = SchoolClass.builder()
-                    .name("해바라기반")
-                    .build();
-            em.persist(schoolClass); // 일단 OneToMany 중 One에 해당하는 엔티티 persist
-
-            // 비영속 엔티티 생성(Many에 해당하는 엔티티)
             Person person = Person.builder()
+                    .email("kkk@naver.com")
                     .name("길동이")
                     .build();
-            // 리스트에 add
-            schoolClass.addPerson(person);
 
-            System.out.println("^^더티채킹 발생 전^^");
-            em.flush(); // flush 발생으로 인해 더티채킹 발생
-            System.out.println("^^더티채킹 발생 후^^");
-            // 더티채킹으로 인해 Person entity insert 쿼리가 나갔음
+            person = em.merge(person); // merge 수행 후 결과를 다시 담음
 
-            tx.commit(); // commit 전에 flush 자동발생함
-        } catch (Exception e) {
-            tx.rollback();
-        } finally {
-            em.close();
-        }
-    }
-
-    @Test
-    public void collectionRemoveDirtyChecking() {
-        // 리스트 remove 더티체킹
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
-        try {
-            // given
-            SchoolClass schoolClass = SchoolClass.builder()
-                    .name("해바라기반")
+            Person newPerson = Person.builder()
+                    .id(person.getId()) // 위에서 받은 id 삽입
+                    .email("google@google.com")
+                    .name("두식이")
                     .build();
-            Person person1 = Person.builder()
-                    .name("길동이")
-                    .build();
-            Person person2 = Person.builder()
-                    .name("길동이")
-                    .build();
-            schoolClass.addPerson(person1);
-            schoolClass.addPerson(person2);
-            em.persist(schoolClass); // cascade persist에 의해 해바라기반, 학생들 엔티티 persist // 이건 더티체킹과 별개의 cascade 쪽임
+            newPerson = em.merge(newPerson);
 
-            // when
-            // 학생 2명 리스트에서 제거
-            schoolClass.removePerson(person1);
-            schoolClass.removePerson(person2);
-            System.out.println("^^더티채킹 발생 전^^");
-            em.flush(); // flush 발생으로 인해 더티채킹 발생
-            System.out.println("^^더티채킹 발생 후^^");
-            // 더티채킹으로 인해 Person entity delete 쿼리가 2개 나갔음
+            // 영속성 컨텍스트에 동일한 id가 있음으로 merge 시 같은 객체를 꺼내옴
+            Assert.assertEquals(person, newPerson);
+            // 또한 더티체킹 발생함
+            Assert.assertEquals("두식이", person.getName());
 
             tx.commit(); // commit 전에 flush 자동발생함
         } catch (Exception e) {

@@ -95,7 +95,7 @@ public class JoinTests {
                 .setParameter("name", "%반%")
                 .getResultList(); // 사람 이름에 반 이 들어가면 조회 (모든 사람 이름에 반이 들어가므로 전체 조회)
 
-        Assert.assertEquals(classList.size(), 2); // 중복이 제거된 2개만 조회
+        Assert.assertEquals(2, classList.size()); // 중복이 제거된 2개만 조회
         System.out.println("classListSize: " + classList.size());
 
         for(SchoolClass schoolClass : classList) {
@@ -114,7 +114,7 @@ public class JoinTests {
                 .setParameter("name", "%반%")
                 .getResultList(); // 사람 이름에 반 이 들어가면 조회 (모든 사람 이름에 반이 들어가므로 전체 조회)
 
-        Assert.assertEquals(classList.size(), 2); // 호랑이반, 토끼반 2개 나온다.
+        Assert.assertEquals(2, classList.size()); // 호랑이반, 토끼반 2개 나온다.
         System.out.println("classListSize: " + classList.size());
 
         for(SchoolClass schoolClass : classList) {

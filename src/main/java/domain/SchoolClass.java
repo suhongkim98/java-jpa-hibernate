@@ -24,7 +24,7 @@ public class SchoolClass {
 
     // mappedBy는 읽기전용 필드 // personList 에 담긴 엔티티에 대해 persist 영속성전이
     // orphanRemoval: 부모 엔티티와 연관관계가 끊어진 자식 엔티티를 고아객체로 보고 자동으로 삭제해주는 기능
-    @OneToMany(mappedBy = "myClass", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "myClass", cascade = {CascadeType.PERSIST}, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Person> personList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -159,7 +159,7 @@ public class FetchJoinTests {
                 .setParameter("name", "%반%")
                 .getResultList(); // 사람 이름에 반 이 들어가면 조회 (모든 사람 이름에 반이 들어가므로 전체 조회)
 
-        Assert.assertEquals(classList.size(), 2); // 반 2개 조회
+        Assert.assertEquals(2, classList.size()); // 반 2개 조회
         System.out.println("classListSize: " + classList.size());
 
         for(SchoolClass schoolClass : classList) {
@@ -190,7 +190,7 @@ public class FetchJoinTests {
                 .setMaxResults(2) // 반 2개만 조회
                 .getResultList();
 
-        Assert.assertEquals(classList.size(), 2); // 반 2개 조회
+        Assert.assertEquals(2, classList.size()); // 반 2개 조회
         System.out.println("classListSize: " + classList.size());
 
         for(SchoolClass schoolClass : classList) { // @BatchSize 설정을 안하면 지연로딩에 의해 호출시점에 쿼리가 나가 2번 발생
